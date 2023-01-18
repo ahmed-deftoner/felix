@@ -188,7 +188,7 @@ pub struct CreateView {
     pub user_id: i32,
 
     /// The id of the Song the user listened
-    pub Song_id: i32,
+    pub song_id: i32,
 
     /// How long the user listened the Song for
     pub duration: i32,

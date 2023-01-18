@@ -7,7 +7,7 @@ pub struct Song {
     artist: String
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct Playlist {
     id: Uuid,
     name: String,

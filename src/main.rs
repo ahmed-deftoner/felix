@@ -1,5 +1,6 @@
 mod models;
 mod args;
+mod ops;
 use args::EntityType;
 use args::FelixArgs;
 use clap::Parser;
