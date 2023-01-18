@@ -1,11 +1,11 @@
 mod models;
 mod args;
 use args::EntityType;
-use args::RustflixArgs;
+use args::FelixArgs;
 use clap::Parser;
 
 fn main() {
-    let args = RustflixArgs::parse();
+    let args = FelixArgs::parse();
 
 /*     match args.entity_type {
         EntityType::User(user) => handle_user_command(user),

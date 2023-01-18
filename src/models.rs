@@ -1,11 +1,13 @@
 use uuid::Uuid;
 
+#[derive(Debug)]
 pub struct Song {
     id: Uuid,
     name: String,
     artist: String
 }
 
+#[derive(Debug)]
 pub struct Playlist {
     id: Uuid,
     name: String,
@@ -13,6 +15,7 @@ pub struct Playlist {
     is_public: bool
 }
 
+#[derive(Debug)]
 pub struct User {
     id: Uuid,
     name: String,
