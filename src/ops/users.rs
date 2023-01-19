@@ -1,7 +1,7 @@
-use std::fs::OpenOptions;
+use std::fs::{OpenOptions, self};
 use std::io::Write;
 
-use uuid::{Uuid, uuid};
+use uuid::{Uuid};
 
 use crate::args::{
     UserSubcommand, 
@@ -45,48 +45,37 @@ fn create_user(user: CreateUser) {
         .open("../data/users.txt")
         .expect("Unable to open file");   
     
-    fileRef.write_all(new_user).expect("write failed");
+    fileRef.write_all(new_user.id.as_bytes()).expect("write failed");
+    fileRef.write_all(" ".as_bytes()).expect("write failed");
+    fileRef.write_all(new_user.name.as_bytes()).expect("write failed");
+    fileRef.write_all(" ".as_bytes()).expect("write failed");
+    fileRef.write_all(new_user.email.as_bytes()).expect("write failed");
+    fileRef.write_all(" ".as_bytes()).expect("write failed");
+    fileRef.write_all("[]".as_bytes()).expect("write failed");
     fileRef.write_all("\n".as_bytes()).expect("write failed");
     println!("User created successfully");
 }
 
-fn update_user(user: UpdateUser) {
-    println!("Updating user: {:?}", user);
-
-    let db_user = User {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        removed: false,
-    };
-    
-    diesel::update(users.find(user.id))
-        .set(&db_user)
-        .execute(&connection)
-        .expect("Error updating user");
-}
-
-fn delete_user(user: DeleteEntity) {
-    println!("Deleting user: {:?}", user);
-    use crate::schema::users::dsl::*;
-
-    let connection = establish_connection();
-    diesel::delete(users.find(user.id))
-        .execute(&connection)
-        .expect("Error deleting user");
-}
 
 fn show_users() {
     let users = include_str!("../data/users.txt")
         .lines()
         .map(|line| {
-            let x = line.split_whitespace();
+            let mut x = line.split_whitespace();
             let user = User {
                 id: x.next().unwrap().parse::<Uuid>().unwrap(),
                 name: x.next().unwrap().to_owned(),
                 email: x.next().unwrap().to_owned(),
-                playlists: x.next().unwrap(),
+                playlists: [].to_vec()
             };
             println!("{:?}", user);
         });
+}
+
+fn update_user(user: UpdateUser) {
+    todo!()
+}
+
+fn delete_user(user: DeleteEntity) {
+    todo!()
 }

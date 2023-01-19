@@ -1,13 +1,13 @@
 use uuid::Uuid;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Song {
     id: Uuid,
     name: String,
     artist: String
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct Playlist {
     id: Uuid,
     name: String,
@@ -17,8 +17,8 @@ pub struct Playlist {
 
 #[derive(Debug)]
 pub struct User {
-    id: Uuid,
-    name: String,
-    email: String,
-    playlists: Vec<Playlist>
+    pub id: Uuid,
+    pub name: String,
+    pub email: String,
+    pub playlists: Vec<Playlist>
 }
