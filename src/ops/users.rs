@@ -1,3 +1,6 @@
+use std::fs::OpenOptions;
+use std::io::Write;
+
 use uuid::{Uuid, uuid};
 
 use crate::args::{
@@ -36,12 +39,21 @@ fn create_user(user: CreateUser) {
         email: user.email,
         playlists: [].to_vec(),
     };
+
+    let mut fileRef = OpenOptions::new()
+        .append(true)
+        .open("../data/users.txt")
+        .expect("Unable to open file");   
+    
+    fileRef.write_all(new_user).expect("write failed");
+    fileRef.write_all("\n".as_bytes()).expect("write failed");
+    println!("User created successfully");
 }
 
 fn update_user(user: UpdateUser) {
     println!("Updating user: {:?}", user);
 
-    let db_user = DBUser {
+    let db_user = User {
         id: user.id,
         name: user.name,
         email: user.email,
@@ -65,15 +77,16 @@ fn delete_user(user: DeleteEntity) {
 }
 
 fn show_users() {
-    use crate::schema::users::dsl::*;
-
-    let connection = establish_connection();
-    let results = users
-        .load::<DBUser>(&connection)
-        .unwrap();
-
-    println!("Displaying {} users", results.len());
-    for user in results {
-        println!("{:?}", user);
-    }
+    let users = include_str!("../data/users.txt")
+        .lines()
+        .map(|line| {
+            let x = line.split_whitespace();
+            let user = User {
+                id: x.next().unwrap().parse::<Uuid>().unwrap(),
+                name: x.next().unwrap().to_owned(),
+                email: x.next().unwrap().to_owned(),
+                playlists: x.next().unwrap(),
+            };
+            println!("{:?}", user);
+        });
 }
